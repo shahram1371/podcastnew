@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:podcast/audio_player.dart';
+import 'secondPage.dart';
 
 class PlayScreen extends StatefulWidget {
   @override
@@ -35,7 +36,7 @@ class _PlayScreenState extends State<PlayScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 40,
+                  height: 150,
                 ),
                 Container(
                   width: 175,
@@ -110,7 +111,22 @@ class _PlayScreenState extends State<PlayScreen> {
                     ],
                   ),
                 ),
-                // Slider(value: 10, onChanged: null),
+                SizedBox(
+                  height: 50,
+                ),
+                SliderTheme(
+                  data: SliderThemeData(
+                    trackHeight: 5,
+                    thumbShape: RoundSliderThumbShape(enabledThumbRadius: 5),
+                  ),
+                  child: Slider(
+                      min: 0,
+                      max: 20,
+                      value: 0,
+                      activeColor: Color(0xff2B2A67),
+                      inactiveColor: Colors.blue.withOpacity(0.3),
+                      onChanged: (value) {}),
+                ),
                 // AudioFile(),
               ],
             ),
