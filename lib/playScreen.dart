@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:podcast/audio_player.dart';
+import 'package:podcast/myaudio.dart';
+import 'package:provider/provider.dart';
 import 'secondPage.dart';
 
 class PlayScreen extends StatefulWidget {
@@ -36,7 +38,7 @@ class _PlayScreenState extends State<PlayScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 150,
+                  height: 100,
                 ),
                 Container(
                   width: 175,
@@ -114,19 +116,61 @@ class _PlayScreenState extends State<PlayScreen> {
                 SizedBox(
                   height: 50,
                 ),
-                SliderTheme(
-                  data: SliderThemeData(
-                    trackHeight: 5,
-                    thumbShape: RoundSliderThumbShape(enabledThumbRadius: 5),
+                Padding(
+                  padding: const EdgeInsets.only(right: 20.0, left: 20.0),
+                  child: SliderTheme(
+                    data: SliderThemeData(
+                      trackHeight: 5,
+                      thumbShape: RoundSliderThumbShape(enabledThumbRadius: 5),
+                    ),
+                    child: Slider(
+                        min: 0,
+                        max: 20,
+                        value: 0,
+                        activeColor: Color(0xff2B2A67),
+                        inactiveColor: Colors.blue.withOpacity(0.3),
+                        onChanged: (value) {}),
                   ),
-                  child: Slider(
-                      min: 0,
-                      max: 20,
-                      value: 0,
-                      activeColor: Color(0xff2B2A67),
-                      inactiveColor: Colors.blue.withOpacity(0.3),
-                      onChanged: (value) {}),
                 ),
+
+                SizedBox(
+                  height: 10.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      child: Icon(
+                        Icons.skip_previous,
+                        color: Color(0xff2B2A67),
+                        size: 35,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Provider.of<MyAudio>(context, listen: false)
+                            .playAudio();
+                      },
+                      child: Icon(
+                        Icons.play_arrow,
+                        color: Color(0xff2B2A67),
+                        size: 40,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 20.0,
+                    ),
+                    Icon(
+                      Icons.skip_next,
+                      color: Color(0xff2B2A67),
+                      size: 35,
+                    ),
+                  ],
+                ),
+
                 // AudioFile(),
               ],
             ),

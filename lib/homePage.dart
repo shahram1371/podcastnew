@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:podcast/secondPage.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -70,7 +71,10 @@ class _HomePageState extends State<HomePage> {
             ),
             TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/second');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SecondPage()),
+                );
               },
               child: Center(
                 child: Container(
