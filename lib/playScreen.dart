@@ -3,6 +3,7 @@ import 'package:podcast/audio_player.dart';
 import 'package:podcast/myaudio.dart';
 import 'package:provider/provider.dart';
 import 'secondPage.dart';
+import 'downloadScreen.dart';
 
 class PlayScreen extends StatefulWidget {
   @override
@@ -111,10 +112,18 @@ class _PlayScreenState extends State<PlayScreen> {
                         color: Color(0xff2B2A67),
                         size: 25,
                       ),
-                      Icon(
-                        Icons.download_rounded,
-                        color: Color(0xff2B2A67),
-                        size: 25,
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => DownloadScreen()));
+                        },
+                        child: Icon(
+                          Icons.download_rounded,
+                          color: Color(0xff2B2A67),
+                          size: 25,
+                        ),
                       ),
                       Icon(
                         Icons.favorite_border_outlined,
