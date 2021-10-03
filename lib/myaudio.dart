@@ -37,6 +37,9 @@ class MyAudio extends ChangeNotifier {
     });
   }
 
+  List<IconData> icons = [Icons.play_arrow, Icons.pause];
+  List<Color> colors = [Color(0xff2B2A67), Color(0xffFF3737)];
+
   pauseAudio() {
     audioPlayer.pause();
   }
@@ -47,5 +50,9 @@ class MyAudio extends ChangeNotifier {
 
   playAudio() {
     audioPlayer.play(url);
+  }
+
+  seekAudio(Duration durationToSeek) {
+    audioPlayer.seek(durationToSeek);
   }
 }

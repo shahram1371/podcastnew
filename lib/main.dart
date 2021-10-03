@@ -15,10 +15,6 @@ class MyApp extends StatelessWidget {
       create: (_) => MyAudio(),
       child: MaterialApp(
         home: HomePage(),
-        // routes: {
-        //   '/': (context) => HomePage(),
-        //   '/second': (context) => SecondPage(),
-        // },
         debugShowCheckedModeBanner: true,
       ),
     );

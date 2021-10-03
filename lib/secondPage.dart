@@ -2,6 +2,8 @@ import 'dart:ffi';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:podcast/myaudio.dart';
+import 'package:provider/provider.dart';
 import 'playScreen.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -62,6 +64,7 @@ class _SecondPageState extends State<SecondPage> {
     super.initState();
   }
 
+  Color color;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -187,19 +190,80 @@ class _SecondPageState extends State<SecondPage> {
                                     Center(
                                       child: TextButton(
                                         onPressed: () {
-                                          if (musicFlag == 0) {
-                                            setState(() {
-                                              musicFlag = 1;
-                                              icon = Icons.pause;
-                                              playAudio();
-                                            });
-                                          } else {
-                                            setState(() {
-                                              musicFlag = 0;
-                                              icon = Icons.play_arrow;
-                                              pauseAudio();
-                                            });
-                                          }
+                                          Provider.of<MyAudio>(context,
+                                                          listen: false)
+                                                      .audioState ==
+                                                  "Playing"
+                                              ? Provider.of<MyAudio>(context,
+                                                      listen: false)
+                                                  .pauseAudio()
+                                              : Provider.of<MyAudio>(context,
+                                                      listen: false)
+                                                  .playAudio();
+                                          setState(() {
+                                            icon = Provider.of<MyAudio>(context,
+                                                            listen: false)
+                                                        .audioState ==
+                                                    "Playing"
+                                                ? Provider.of<MyAudio>(context,
+                                                        listen: false)
+                                                    .icons[0]
+                                                : Provider.of<MyAudio>(context,
+                                                        listen: false)
+                                                    .icons[1];
+                                            color = Provider.of<MyAudio>(
+                                                            context,
+                                                            listen: false)
+                                                        .audioState ==
+                                                    "Playing"
+                                                ? Provider.of<MyAudio>(context,
+                                                        listen: false)
+                                                    .colors[0]
+                                                : Provider.of<MyAudio>(context,
+                                                        listen: false)
+                                                    .colors[1];
+                                          });
+
+                                          // // if (Provider.of<MyAudio>(context,
+                                          // //             listen: false)
+                                          // //         .audioState ==
+                                          // //     "Stopped") {
+                                          // //   setState(() {
+                                          // //     musicFlag = 1;
+                                          // //     icon = Provider.of<MyAudio>(
+                                          // //             context,
+                                          // //             listen: false)
+                                          // //         .icons[0];
+                                          // //     Provider.of<MyAudio>(context,
+                                          // //             listen: false)
+                                          // //         .playAudio();
+                                          // //   });
+                                          // // }
+                                          // if (Provider.of<MyAudio>(context,
+                                          //             listen: false)
+                                          //         .audioState ==
+                                          //     "Playing") {
+                                          //   setState(() {
+                                          //     musicFlag = 0;
+                                          //     icon = Provider.of<MyAudio>(
+                                          //             context,
+                                          //             listen: false)
+                                          //         .icons[1];
+                                          //     Provider.of<MyAudio>(context,
+                                          //             listen: false)
+                                          //         .playAudio();
+                                          //   });
+                                          // } else {
+                                          //   Provider.of<MyAudio>(context,
+                                          //           listen: false)
+                                          //       .pauseAudio();
+                                          //   setState(() {
+                                          //     icon = Provider.of<MyAudio>(
+                                          //             context,
+                                          //             listen: false)
+                                          //         .icons[0];
+                                          //   });
+                                          // }
 
                                           // );
                                         },
@@ -216,7 +280,7 @@ class _SecondPageState extends State<SecondPage> {
                                             child: Icon(
                                               // Icons.play_arrow,
                                               icon,
-                                              color: Color(0xffFF3737),
+                                              color: color,
                                             ),
                                           ),
                                         ),
@@ -228,9 +292,9 @@ class _SecondPageState extends State<SecondPage> {
                             ),
                           ),
                         ),
-                        Text(totalduration.toString().split('.').first),
-                        Text(position.toString().split('.').first),
-                        Text(audioState.toString().split('.').first),
+                        // Text(totalduration.toString().split('.').first),
+                        // Text(position.toString().split('.').first),
+                        // Text(audioState.toString().split('.').first),
                       ],
                     ),
                   ),

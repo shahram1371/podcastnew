@@ -10,6 +10,11 @@ class PlayScreen extends StatefulWidget {
 }
 
 class _PlayScreenState extends State<PlayScreen> {
+  IconData icon = Icons.play_arrow;
+  int musicFlag = 0;
+  Color color;
+  double currentvalue = 0;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -40,40 +45,46 @@ class _PlayScreenState extends State<PlayScreen> {
                 SizedBox(
                   height: 100,
                 ),
-                Container(
-                  width: 175,
-                  height: 175,
-                  decoration: BoxDecoration(
-                    color: Color(0xff101047),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15.0, left: 15.0),
-                        child: Align(
-                          alignment: Alignment.bottomLeft,
-                          child: CircleAvatar(
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => SecondPage()));
+                  },
+                  child: Container(
+                    width: 175,
+                    height: 175,
+                    decoration: BoxDecoration(
+                      color: Color(0xff101047),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 15.0, left: 15.0),
+                          child: Align(
+                            alignment: Alignment.bottomLeft,
+                            child: CircleAvatar(
+                              child: CircleAvatar(
+                                radius: 15,
+                                backgroundColor: Color(0xffFF3737),
+                              ),
+                              radius: 35,
+                              backgroundColor: Color(0xff2B2A67),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Align(
+                            alignment: Alignment.bottomRight,
                             child: CircleAvatar(
                               radius: 15,
-                              backgroundColor: Color(0xffFF3737),
+                              backgroundColor: Color(0xff2B2A67),
                             ),
-                            radius: 35,
-                            backgroundColor: Color(0xff2B2A67),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: CircleAvatar(
-                            radius: 15,
-                            backgroundColor: Color(0xff2B2A67),
-                          ),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -124,12 +135,55 @@ class _PlayScreenState extends State<PlayScreen> {
                       thumbShape: RoundSliderThumbShape(enabledThumbRadius: 5),
                     ),
                     child: Slider(
-                        min: 0,
-                        max: 20,
-                        value: 0,
+                        min: 0.0,
+                        max: Provider.of<MyAudio>(context, listen: false)
+                                    .totalduration ==
+                                null
+                            ? 20
+                            : Provider.of<MyAudio>(context, listen: false)
+                                .totalduration
+                                .inMilliseconds
+                                .toDouble(),
+                        value: Provider.of<MyAudio>(context, listen: false)
+                                    .position ==
+                                null
+                            ? 0
+                            : Provider.of<MyAudio>(context, listen: false)
+                                .position
+                                .inMilliseconds
+                                .toDouble(),
                         activeColor: Color(0xff2B2A67),
                         inactiveColor: Colors.blue.withOpacity(0.3),
-                        onChanged: (value) {}),
+                        onChanged: (value) {
+                          setState(() {
+                            Provider.of<MyAudio>(context, listen: false)
+                                .seekAudio(
+                                    Duration(milliseconds: value.toInt()));
+                          });
+                        }),
+                  ),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.only(right: 40.0, left: 40.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(Provider.of<MyAudio>(context).position == null
+                          ? "00:00"
+                          : Provider.of<MyAudio>(context)
+                              .position
+                              .toString()
+                              .split('.')
+                              .first),
+                      Text(Provider.of<MyAudio>(context).position == null
+                          ? "00:00"
+                          : Provider.of<MyAudio>(context)
+                              .totalduration
+                              .toString()
+                              .split('.')
+                              .first),
+                    ],
                   ),
                 ),
 
@@ -140,6 +194,7 @@ class _PlayScreenState extends State<PlayScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextButton(
+                      onPressed: () {},
                       child: Icon(
                         Icons.skip_previous,
                         color: Color(0xff2B2A67),
@@ -152,16 +207,56 @@ class _PlayScreenState extends State<PlayScreen> {
                     GestureDetector(
                       onTap: () {
                         Provider.of<MyAudio>(context, listen: false)
-                            .playAudio();
+                                    .audioState ==
+                                "Playing"
+                            ? Provider.of<MyAudio>(context, listen: false)
+                                .pauseAudio()
+                            : Provider.of<MyAudio>(context, listen: false)
+                                .playAudio();
+                        setState(() {
+                          icon = Provider.of<MyAudio>(context, listen: false)
+                                      .audioState ==
+                                  "Playing"
+                              ? Provider.of<MyAudio>(context, listen: false)
+                                  .icons[0]
+                              : Provider.of<MyAudio>(context, listen: false)
+                                  .icons[1];
+                          color = Provider.of<MyAudio>(context, listen: false)
+                                      .audioState ==
+                                  "Playing"
+                              ? Provider.of<MyAudio>(context, listen: false)
+                                  .colors[0]
+                              : Provider.of<MyAudio>(context, listen: false)
+                                  .colors[1];
+                        });
+
+                        // if (Provider.of<MyAudio>(context, listen: false)
+                        //         .audioState ==
+                        //     "Playing") {
+                        //   setState(() {
+
+                        //     icon = Provider.of<MyAudio>(context, listen: false)
+                        //         .icons[0];
+                        //     Provider.of<MyAudio>(context, listen: false)
+                        //         .playAudio();
+                        //   });
+                        // } else {
+                        //   Provider.of<MyAudio>(context, listen: false)
+                        //       .pauseAudio();
+                        //   setState(() {
+                        //     icon = Provider.of<MyAudio>(context, listen: false)
+                        //         .icons[1];
+                        //   });
+                        // }
                       },
                       child: Icon(
-                        Icons.play_arrow,
-                        color: Color(0xff2B2A67),
+                        icon,
+                        color: color,
                         size: 40,
                       ),
                     ),
                     SizedBox(
-                      width: 20.0,
+                      width: 30.0,
                     ),
                     Icon(
                       Icons.skip_next,
@@ -170,7 +265,18 @@ class _PlayScreenState extends State<PlayScreen> {
                     ),
                   ],
                 ),
-
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0, left: 15),
+                  child: Text(
+                      Provider.of<MyAudio>(context, listen: false).audioState ==
+                              null
+                          ? "Pause"
+                          : Provider.of<MyAudio>(context, listen: false)
+                              .audioState
+                              .toString()
+                              .split('.')
+                              .first),
+                ),
                 // AudioFile(),
               ],
             ),
