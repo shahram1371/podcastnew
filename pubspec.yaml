@@ -36,6 +36,7 @@ dependencies:
   provider: ^6.0.1
   dio: any
   path_provider: any
+  permission_handler: ^8.1.6
 dev_dependencies:
   flutter_test:
     sdk: flutter

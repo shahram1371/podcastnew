@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:podcast/myaudio.dart';
 import 'package:provider/provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class DownloadScreen extends StatefulWidget {
   @override
@@ -18,6 +19,7 @@ class _DownloadScreenState extends State<DownloadScreen> {
     // TODO: implement initState
     super.initState();
     downloadFile();
+    getPermission();
   }
 
   Future<void> downloadFile() async {
@@ -25,10 +27,21 @@ class _DownloadScreenState extends State<DownloadScreen> {
     var dir = await getApplicationDocumentsDirectory();
     try {
       await dio.download(Provider.of<MyAudio>(context, listen: false).url,
-          "${dir.path}/myvoice.mp3");
+          "${dir.path}/myvoice.mp3", onReceiveProgress: (rec, total) {
+        //  "${dir.path}/myvoice.mp3"
+        setState(() {
+          downloading = true;
+          progressString = ((rec / total) * 100).toStringAsFixed(0) + "%";
+          print("${dir.path}/myvoice.mp3()");
+        });
+      });
     } catch (e) {
       print(e);
     }
+    setState(() {
+      downloading = false;
+      progressString = "Completed";
+    });
   }
 
   @override
@@ -56,8 +69,15 @@ class _DownloadScreenState extends State<DownloadScreen> {
                   ),
                 ),
               )
-            : Text("No Data"),
+            : TextButton(
+                child: Text("No data"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
       ),
     );
   }
+
+  void getPermission() {}
 }
