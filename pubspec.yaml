@@ -37,6 +37,7 @@ dependencies:
   dio: any
   path_provider: any
   permission_handler: ^8.1.6
+  get_it: ^7.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
